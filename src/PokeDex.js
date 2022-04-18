@@ -1,80 +1,98 @@
-import React, { useState , useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+//import axios from 'axios';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+//import Card from '@mui/material/Card';
+//import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import CardMedia from '@mui/material/CardMedia';
+//import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import { CardActionArea, Container } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+//import { styled, alpha } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+//import InputBase from '@mui/material/InputBase';
+//import SearchIcon from '@mui/icons-material/Search';
+import MenuIcon from '@mui/icons-material/Menu';
+import useData from './hooks/useData';
+import usePokemon from './hooks/usePokemon';
+import PokeCard from './PokeCard';
 
-function capitalize(s) {
-    return s && s[0].toUpperCase() + s.slice(1);
-}
+
 
 const PokeDex = () => {
 
-    const [pokemon, setPokemon] = React.useState([]);
+    const [pokemon, setPokemon, loadData, getRandomPokemon] = useData();
 
-    const loadData = async () => {
-        try {
-            console.log("hola")
-            const res = await axios.get('https://pokeapi.co/api/v2/pokemon/?limit=10');
-            for (let i = 0; i < res.data.results.length; i++) {
-                await axios.get(res.data.results[i].url).then(res => {
-                    setPokemon(prevState => [...prevState, res.data])
-                })
-            }
+    const [searchTerm, setSearchTerm, handleSearch, searchFilter] = usePokemon();
 
-        } catch (error) {
-            console.log("error")
-        }
-    }
 
-    const getRandomPokemon = async () => {
-        const random = Math.floor(Math.random() * 150)
-        const resu = await axios.get('https://pokeapi.co/api/v2/pokemon/' + random)
-        setPokemon(prevState => [...prevState, resu.data])
-    }
-
-    useEffect(() => {
-        loadData()
-    }, [])
-
+    /*
+    (value) => {
+                        if (searchTerm === '') {
+                            return value
+                        } else {
+                            return value.name.toLowerCase().includes(searchTerm.toLowerCase())
+                        }
+                    } */
 
     return (
         <div>
+
             <h1>PokeDex</h1>
+
             
+
             <Container maxWidth='lg' elevattion={4}>
-            <Grid container spacing={2}>
-                {pokemon.map(pokemon => {
-                    return (
-                                <Grid item xs={12} sm={4} key={pokemon?.id} >
-                                    <Card key={pokemon?.id} sx={{ maxWidth: 275, marginBottom: 2 }}>
-                                        <CardActionArea>
-                                            <CardContent style={{ backgroundColor: "#C3423F" }}>
-                                                <CardMedia />
-                                                    <h2>#{pokemon?.id} {capitalize(pokemon?.name)}</h2>
-                                                    <img src={pokemon?.sprites.front_default} alt="" />
-                                                    <Typography variant="body1" color="text.secondary">
-                                                        <p>Attacks: <br /> {capitalize(pokemon?.abilities[0].ability.name) + " - " + capitalize(pokemon?.abilities[1].ability.name)} </p>
-                                                        <p>Types: {capitalize(pokemon?.types[0].type.name)}</p>
-                                                    </Typography>
 
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                </Grid>
+                <Box sx={{ flexGrow: 1 }}>
+                    <AppBar position="static" sx={{ bgcolor: "rgb(195, 66, 63)" }}>
+                        <Toolbar
+                            color="black"
+                        >
+                            <IconButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                sx={{ mr: 2, color: "#111214" }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="div"
+                                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                            >
+                            </Typography>
+                            <input type="text" placeholder="Search" onChange={handleSearch} />
 
-
-                        )
+                        </Toolbar>
+                    </AppBar>
+                </Box>
+                <br />
+                <Grid container spacing={2}>
+                    {pokemon.filter(searchFilter
+                    ).map(pokemon => {
+                        return (
+                            <PokeCard 
+                                key={pokemon.id}
+                                id = {pokemon.id}
+                                name = {pokemon.name}
+                                img = {pokemon.sprites.front_default}
+                                skill1 = {pokemon.abilities[0].ability.name}
+                                skill2 = {pokemon.abilities[1].ability.name}
+                                type = {pokemon.types[0].type.name}
+                                base_experience = {pokemon.base_experience}
+                            />
+                            )
                     })
-                }
-                
-                
+                    }
                 </Grid>
             </Container>
+
 
             <Button variant="contained" color="primary" onClick={getRandomPokemon} >Add random Pokemon</Button>
 
@@ -82,4 +100,4 @@ const PokeDex = () => {
     )
 }
 
-export default PokeDex
+export default PokeDex;
