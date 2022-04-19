@@ -10,7 +10,7 @@ const useData = () => {
     const loadData = async () => {
         try {
             console.log("primer try")
-            const res = await axios.get('https://pokeapi.co/api/v2/pokemon/?limit=100');
+            const res = await axios.get('https://pokeapi.co/api/v2/pokemon/?limit=10');
             for (let i = 0; i < res.data.results.length; i++) {
                 await axios.get(res.data.results[i].url).then(res => {
                     setPokemon(prevState => [...prevState, res.data])
