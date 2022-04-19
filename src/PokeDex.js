@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 //import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
-import { CardActionArea, Container } from '@mui/material';
+import Container from '@mui/material/Container';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -27,22 +27,10 @@ const PokeDex = () => {
 
     const [searchTerm, setSearchTerm, handleSearch, searchFilter] = usePokemon();
 
-
-    /*
-    (value) => {
-                        if (searchTerm === '') {
-                            return value
-                        } else {
-                            return value.name.toLowerCase().includes(searchTerm.toLowerCase())
-                        }
-                    } */
-
     return (
         <div>
 
             <h1>PokeDex</h1>
-
-            
 
             <Container maxWidth='lg' elevattion={4}>
 
@@ -73,7 +61,7 @@ const PokeDex = () => {
                     </AppBar>
                 </Box>
                 <br />
-                <Grid container spacing={2}>
+                <Grid container spacing={2} style={{margin: "0 auto"}}>
                     {pokemon.filter(searchFilter
                     ).map(pokemon => {
                         return (

@@ -4,10 +4,8 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
-import { CardActionArea, Container } from '@mui/material';
+import { CardActionArea } from '@mui/material';
 
-
-    
 function capitalize(s) {
     return s && s[0].toUpperCase() + s.slice(1);
 }
